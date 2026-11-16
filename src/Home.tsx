@@ -21,6 +21,8 @@ const content = {
     status: 'Looking for a junior position or internship.',
     art: 'Paper ribbon shaped like the letters VM',
     langLabel: 'Language',
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
   },
   UA: {
     htmlLang: 'uk',
@@ -35,6 +37,8 @@ const content = {
     status: 'Шукаю junior-позицію або стажування.',
     art: 'Паперова стрічка у формі літер VM',
     langLabel: 'Мова',
+    menuOpen: 'Відкрити меню',
+    menuClose: 'Закрити меню',
   },
 } as const
 
@@ -48,7 +52,17 @@ function readStoredLang(): Lang {
 
 export function Home() {
   const [lang, setLang] = useState<Lang>(readStoredLang)
+  const [menuOpen, setMenuOpen] = useState(false)
   const t = content[lang]
+
+  // Mobile menu: lock page scroll (CSS only applies it on small screens) and close on Escape.
+  useEffect(() => {
+    document.documentElement.classList.toggle('menu-open', menuOpen)
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   useEffect(() => {
     document.documentElement.lang = t.htmlLang
@@ -79,7 +93,49 @@ export function Home() {
           </div>
           <a className="btn-touch" href="#contacts">{t.touch}</a>
         </nav>
+        <button
+          type="button"
+          className="menu-btn"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          aria-label={menuOpen ? t.menuClose : t.menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <svg viewBox="0 0 36 24" aria-hidden="true">
+            {menuOpen ? (
+              <>
+                <polygon points="4,14 8,10 32,10 28,14" transform="rotate(45 18 12)" />
+                <polygon points="4,14 8,10 32,10 28,14" transform="rotate(-45 18 12)" />
+              </>
+            ) : (
+              <>
+                <polygon points="6,2 34,2 30,6 2,6" />
+                <polygon className="menu-btn__tip" points="2,6 6,2 11,2 7,6" />
+                <polygon points="19,10 34,10 30,14 15,14" />
+                <polygon points="6,18 34,18 30,22 2,22" />
+              </>
+            )}
+          </svg>
+        </button>
       </header>
+
+      <div id="mobile-menu" className={`mobile-menu${menuOpen ? ' is-open' : ''}`}>
+        <div className="mobile-menu__top">
+          <a className="mobile-menu__link" href="#work" onClick={() => setMenuOpen(false)}>{t.work}</a>
+          <a className="mobile-menu__link" href="#about" onClick={() => setMenuOpen(false)}>{t.about}</a>
+          <div className="mobile-menu__actions">
+            <a className="btn-touch" href="#contacts" onClick={() => setMenuOpen(false)}>{t.touch}</a>
+            <div className="lang" role="group" aria-label={t.langLabel}>
+              <button type="button" className={lang === 'EN' ? 'is-active' : ''} aria-pressed={lang === 'EN'} onClick={() => setLang('EN')}>EN</button>
+              <span aria-hidden="true"> / </span>
+              <button type="button" className={lang === 'UA' ? 'is-active' : ''} aria-pressed={lang === 'UA'} onClick={() => setLang('UA')}>UA</button>
+            </div>
+          </div>
+        </div>
+        <div className="mobile-menu__bottom">
+          <img src={vm} alt="" />
+        </div>
+      </div>
 
       <main className="hero">
         <div className="hero__copy">
