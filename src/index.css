@@ -94,6 +94,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
+  width: calc(787 * var(--u)); /* fixed, so the ribbon doesn't move when the language changes */
   position: relative;
   z-index: 1;
 }
@@ -185,4 +186,5 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .hero { height: auto; flex-direction: column; align-items: flex-start; padding-block: 48px; }
   .hero__art { width: 100%; margin-left: 0; }
   .hero__lead { width: auto; }
+  .hero__copy { width: auto; }
 }
