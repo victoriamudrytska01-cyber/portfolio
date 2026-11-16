@@ -23,10 +23,13 @@
   --u: min(var(--uh), calc(var(--avail) / 1879));
   --k: 1.11;      /* subtitle, button, status */
   --kt: 1.2765;   /* headline and italic line (1.11 * 1.15) */
-  /* Ribbon height: ~+8% more than before, scaled together with everything else. */
-  --art-h: calc(697 * var(--u));
-  /* Extra shift to the right (up to 4vw) only when there is spare room. */
-  --art-shift: min(4vw, max(0px, calc(var(--avail) - 1879 * var(--u))));
+  /* Ribbon: +10% (697 -> 767 design px) scaled by the same height-based unit as the text.
+     Text keeps its size; the ribbon is capped by the width left after the text column
+     (right field = left field, gap >= 5vw) and by the hero height. */
+  --room: calc(100vw - 2 * var(--pad-x) - 5vw);
+  --art-h: min(calc(767 * var(--u)), calc((var(--room) - 787 * var(--u)) / 1.566), calc(var(--hero-h) * 0.92));
+  /* Extra shift to the right (up to 3vw, i.e. gap up to 8vw) only when there is spare room. */
+  --art-shift: min(3vw, max(0px, calc(var(--room) - 787 * var(--u) - var(--art-h) * 1.566)));
 }
 @supports (height: 100dvh) {
   :root { --hero-h: calc(100dvh - var(--header-h)); }
@@ -154,7 +157,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: var(--art-h);
   aspect-ratio: 728 / 465;
   flex-shrink: 0;
-  margin-left: calc(8vw + var(--art-shift)); /* gap to the longest italic line: >= 8vw */
+  margin-left: calc(5vw + var(--art-shift)); /* gap to the longest italic line: 5vw..8vw */
   animation: ribbon-float 8s ease-in-out infinite;
   will-change: transform;
 }
