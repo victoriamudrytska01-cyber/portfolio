@@ -15,9 +15,15 @@
   --hero-h: calc(100vh - var(--header-h));
   --pad-x: clamp(32px, 4.4vw, 64px);
   /* 1 "design px": the text block (~692 design px tall) fills ~72% of the hero. */
-  --u: calc(var(--hero-h) / 960);
-  /* Enlargement applied to the key hero elements (~11%). */
-  --k: 1.11;
+  --uh: calc(var(--hero-h) / 960);
+  /* Horizontal room for text + gap + ribbon (viewport minus side fields and the 8vw gap). */
+  --avail: calc(100vw * 0.92 - 2 * var(--pad-x));
+  /* Scale unit: height-driven, but shrinks everything together if the row gets too wide. */
+  --u: min(var(--uh), calc(var(--avail) / 1646));
+  --k: 1.11;      /* subtitle, button, status */
+  --kt: 1.2765;   /* headline and italic line (1.11 * 1.15) */
+  /* Ribbon height: ~+20%, limited by the width left after the text column (~787 design px). */
+  --art-h: min(calc(645 * var(--uh)), calc((var(--avail) - 787 * var(--u)) / 1.566));
 }
 @supports (height: 100dvh) {
   :root { --hero-h: calc(100dvh - var(--header-h)); }
@@ -75,8 +81,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   height: var(--hero-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  justify-content: flex-start;
   padding: 0 var(--pad-x);
   overflow: hidden;
 }
@@ -93,13 +98,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero__title-strong {
   font-family: 'Manrope', sans-serif;
   font-weight: 800;
-  font-size: clamp(53px, calc(88 * var(--u) * var(--k)), 107px);
+  font-size: clamp(53px, calc(88 * var(--u) * var(--kt)), 123px);
   color: var(--cream);
 }
 .hero__title-italic {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: clamp(38px, calc(62 * var(--u) * var(--k)), 75px);
+  font-size: clamp(38px, calc(62 * var(--u) * var(--kt)), 87px);
   color: var(--cream);
 }
 .hero__title-italic span { display: block; white-space: nowrap; }
@@ -135,16 +140,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   align-items: center;
   gap: calc(12 * var(--u));
   color: var(--muted);
-  font-size: clamp(15px, calc(18.4 * var(--u) * var(--k)), 22px);
+  font-size: clamp(13px, calc(18.4 * var(--u) * var(--k)), 16px);
   letter-spacing: 0.01em;
 }
 .hero__status img { width: calc(15 * var(--u)); height: calc(15 * var(--u)); min-width: 10px; min-height: 10px; }
 
 /* Ribbon: ~50% of hero height, vertically centred, same crop as in Figma. */
 .hero__art {
-  height: 56%;
+  height: var(--art-h);
   aspect-ratio: 728 / 465;
   flex-shrink: 0;
+  margin-left: 8vw; /* gap to the longest italic line */
   animation: ribbon-float 8s ease-in-out infinite;
   will-change: transform;
 }
@@ -174,6 +180,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .header { height: auto; min-height: 84px; flex-wrap: wrap; padding-block: 16px; }
   .nav { gap: 24px; flex-wrap: wrap; }
   .hero { height: auto; flex-direction: column; align-items: flex-start; padding-block: 48px; }
-  .hero__art { width: 100%; }
+  .hero__art { width: 100%; margin-left: 0; }
   .hero__lead { width: auto; }
 }
