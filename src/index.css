@@ -16,6 +16,8 @@
   --pad-x: clamp(32px, 4.4vw, 64px);
   /* 1 "design px": the text block (~692 design px tall) fills ~72% of the hero. */
   --u: calc(var(--hero-h) / 960);
+  /* Enlargement applied to the key hero elements (~11%). */
+  --k: 1.11;
 }
 @supports (height: 100dvh) {
   :root { --hero-h: calc(100dvh - var(--header-h)); }
@@ -91,22 +93,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero__title-strong {
   font-family: 'Manrope', sans-serif;
   font-weight: 800;
-  font-size: clamp(48px, calc(88 * var(--u)), 96px);
+  font-size: clamp(53px, calc(88 * var(--u) * var(--k)), 107px);
   color: var(--cream);
 }
 .hero__title-italic {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: clamp(34px, calc(62 * var(--u)), 68px);
+  font-size: clamp(38px, calc(62 * var(--u) * var(--k)), 75px);
   color: var(--cream);
 }
 .hero__title-italic span { display: block; white-space: nowrap; }
 
 .hero__lead {
   margin-top: calc(44 * var(--u));
-  font-size: clamp(15px, calc(22 * var(--u)), 24px);
+  font-size: clamp(17px, calc(22 * var(--u) * var(--k)), 27px);
   color: var(--muted);
-  width: calc(566 * var(--u));
+  width: calc(566 * var(--u) * var(--k));
   min-width: 15.5em;
 }
 .btn-solid {
@@ -114,15 +116,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: var(--btn);
   border: 1px solid var(--btn);
   color: var(--ink);
-  width: calc(299 * var(--u));
-  height: calc(63 * var(--u));
-  min-width: 190px;
-  min-height: 42px;
+  width: calc(299 * var(--u) * var(--k));
+  height: calc(63 * var(--u) * var(--k));
+  min-width: 211px;
+  min-height: 47px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  font-size: clamp(15px, calc(20 * var(--u)), 22px);
+  font-size: clamp(17px, calc(20 * var(--u) * var(--k)), 24px);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .btn-solid:hover { background: var(--btn-hover); border-color: var(--btn-hover); }
@@ -133,14 +135,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   align-items: center;
   gap: calc(12 * var(--u));
   color: var(--muted);
-  font-size: clamp(14px, calc(18.4 * var(--u)), 20px);
+  font-size: clamp(15px, calc(18.4 * var(--u) * var(--k)), 22px);
   letter-spacing: 0.01em;
 }
 .hero__status img { width: calc(15 * var(--u)); height: calc(15 * var(--u)); min-width: 10px; min-height: 10px; }
 
 /* Ribbon: ~50% of hero height, vertically centred, same crop as in Figma. */
 .hero__art {
-  height: 50%;
+  height: 56%;
   aspect-ratio: 728 / 465;
   flex-shrink: 0;
   animation: ribbon-float 8s ease-in-out infinite;
